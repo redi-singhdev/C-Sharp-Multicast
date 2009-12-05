@@ -3,9 +3,11 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Multicast_test/Main.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Multicast_test/FilePiece.cs" ctype="Workbench">
     <Files>
-      <File FileName="Multicast_test/Main.cs" Line="40" Column="53" />
+      <File FileName="Multicast_test/Main.cs" Line="21" Column="4" />
+      <File FileName="Multicast_test/networking.cs" Line="9" Column="17" />
+      <File FileName="Multicast_test/FilePiece.cs" Line="31" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,7 +18,7 @@
                 <Option id="ShowAllFiles" value="False" />
               </Node>
             </Node>
-            <Node name="Main.cs" selected="True" />
+            <Node name="FilePiece.cs" selected="True" />
           </Node>
         </State>
       </Pad>
