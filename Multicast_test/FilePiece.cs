@@ -48,5 +48,40 @@ namespace Multicast_test
 			return b;
 			
 		}
+		
+		static public FilePiece parse_packet(byte[] packet){
+			if (packet.Length < 28){ // header isn't long enough
+				return null;
+			}
+			int data_length = System.BitConverter.ToInt32(packet, 0);
+			if (data_length < 0){ // no data
+				return null;
+			}
+			Int64 piece_number = System.BitConverter.ToInt64(packet, 4);
+			if (piece_number < 0){ // can't have less than 0 piece number
+				return null;
+			}
+			byte[] checksum = new byte[16];
+			for(int i = 12; i < 28; i++){
+				checksum[i] = packet[i];
+			}
+			System.ArraySegment<byte> data_segment = new System.ArraySegment<byte>(packet, 28, packet.Length-28);
+			
+			byte[]data = data_segment.Array;
+			
+			// do a checksum
+			MD5 check = new MD5CryptoServiceProvider();
+			byte[] sum = check.ComputeHash(data);
+			if (sum.Equals(checksum)){
+				return null; // data checksum doesn't match
+			}
+			
+			
+			FilePiece piece = new FilePiece(piece_number, data);
+			
+			return piece;
+			
+			
+		}
 	}
 }

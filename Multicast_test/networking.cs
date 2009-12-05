@@ -95,6 +95,10 @@ namespace Multicast_test
 			}
 		}
 		
+		public void send_file_piece(FilePiece piece){
+			send( piece.get_packet());
+		}
+		
 		private void receive()
 		{
 			try{

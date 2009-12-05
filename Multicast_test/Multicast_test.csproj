@@ -34,6 +34,7 @@
     <Compile Include="networking.cs" />
     <Compile Include="FilePiece.cs" />
     <Compile Include="FileStreamer.cs" />
+    <Compile Include="Controller.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
