@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multicast_test", "Multicast_test\Multicast_test.csproj", "{71F0FC84-67C9-46A8-AC08-2B9EC89A8AC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71F0FC84-67C9-46A8-AC08-2B9EC89A8AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71F0FC84-67C9-46A8-AC08-2B9EC89A8AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71F0FC84-67C9-46A8-AC08-2B9EC89A8AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71F0FC84-67C9-46A8-AC08-2B9EC89A8AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Multicast_test\Multicast_test.csproj
+	EndGlobalSection
+EndGlobal
