@@ -7,6 +7,7 @@ namespace Multicast_test
 {
 	
 	
+	
 	public class FilePiece
 	{
 		/*
@@ -17,15 +18,20 @@ namespace Multicast_test
 		 * rest: data
 		 */
 		
+		public const int data_size = 1024;
 		
-		
-		byte[] data;
-		Int64 number;
+		public byte[] data;
+		public Int64 number;
 		
 		public FilePiece(Int64 num, byte[] file_data)
 		{
 			data = file_data;
 			number = num;
+			if (data.Length != data_size){
+				// data length is wrong! D:
+				data.Initialize();
+				number = -1;
+			}
 		}
 		public byte[] get_checksum(){
 			
@@ -39,7 +45,8 @@ namespace Multicast_test
 			byte[] piece_number = System.BitConverter.GetBytes(number);
 			byte[] checksum = get_checksum();
 			
-			byte[] b = data_length;
+			byte[] b = new byte[4 + 8 + 16 + data.Length]; // 4 + 8 + 16 + data_length
+			
 			data_length.CopyTo(b, 0);
 			piece_number.CopyTo(b,4);
 			checksum.CopyTo(b, 12);
@@ -53,7 +60,7 @@ namespace Multicast_test
 			if (packet.Length < 28){ // header isn't long enough
 				return null;
 			}
-			int data_length = System.BitConverter.ToInt32(packet, 0);
+			Int32 data_length = System.BitConverter.ToInt32(packet, 0);
 			if (data_length < 0){ // no data
 				return null;
 			}
@@ -67,7 +74,7 @@ namespace Multicast_test
 			}
 			System.ArraySegment<byte> data_segment = new System.ArraySegment<byte>(packet, 28, packet.Length-28);
 			
-			byte[]data = data_segment.Array;
+			byte[] data = data_segment.Array;
 			
 			// do a checksum
 			MD5 check = new MD5CryptoServiceProvider();

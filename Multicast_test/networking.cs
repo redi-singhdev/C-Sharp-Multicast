@@ -62,12 +62,7 @@ namespace Multicast_test
 				receiver.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(ip));
 				
 				
-				// start the receive thread right away!
-				
-				Thread Receive = new Thread(new ThreadStart(receive));
-				Receive.IsBackground = true;
-				
-				Receive.Start();
+
 				
 				}catch(System.Net.Sockets.SocketException e) {
 					// this will spit out errors if there's a problem with any of the previous code
@@ -76,6 +71,15 @@ namespace Multicast_test
 					Console.Error.WriteLine(e.ErrorCode);
 			}
 		}
+		public void start_receiving(){
+			// start the receive thread right away!
+			
+			Thread Receive = new Thread(new ThreadStart(receive));
+			Receive.IsBackground = true;
+			
+			Receive.Start();
+		}
+		
 		
 		public void send(byte[] b)
 		{
