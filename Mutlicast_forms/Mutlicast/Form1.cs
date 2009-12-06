@@ -31,7 +31,8 @@ namespace Mutlicast
             test.SubItems.Add("poop");
             ClientList.Items.Add(test);
             Clock = new Timer();
-         
+            Clock.Interval = 10;
+
             RecievingBar.Maximum = 100;
             RecievingBar.Minimum = 0;
             SendingBar.Maximum = 100;
@@ -42,6 +43,8 @@ namespace Mutlicast
         {
         }
 
+
+        //Timers *****************************************************
         private void RecivingUpdater(object sender, EventArgs e)
         {
             if (RecievingBar.Value < 100)
@@ -54,8 +57,18 @@ namespace Mutlicast
                 SendingBar.Value += 1;
         }
 
+        //Clear Everything************************************************
+        public void HideEverything()
+        {
+            StartingPane.Hide();
+            SendingFile.Hide();
+            SendFileSelect.Hide();
+            GetFile.Hide();
+            Recieving.Hide();
+        }
+
         //Button Functions********************************************
-        private void button1_Click(object sender, EventArgs e)
+        private void BrowseUpload(object sender, EventArgs e)
         {
             string filename = (openDlg.ShowDialog() == DialogResult.OK) ? openDlg.FileName : null;
             if (filename != null)
@@ -72,16 +85,10 @@ namespace Mutlicast
             Sending();
         }
 
-        public void HideEverything()
-        {
-            StartingPane.Hide();
-            SendingFile.Hide();
-            SendFileSelect.Hide();
-            GetFile.Hide();
-            Recieving.Hide();
-        }
-
-        //Form Modifiers*************************************************8
+        //Form Modifiers*****************************************************
+        
+        
+        
         private void Starting()
         {
 
@@ -93,6 +100,7 @@ namespace Mutlicast
             this.Bounds = windowsize;
         }
 
+        //SENDERS************************************************************
         private void Sender()
         {
             HideEverything();
@@ -101,7 +109,6 @@ namespace Mutlicast
             Rectangle windowsize = new Rectangle(400, 500, SendFileSelect.Width + 25, SendFileSelect.Height + 50);
             SendFileSelect.Bounds = position;
             this.Bounds = windowsize;
-
         }
 
         private void Sending()
@@ -117,16 +124,10 @@ namespace Mutlicast
             Clock.Start();
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            Sender();
-        }
+       
 
-        private void Cancel_Click(object sender, EventArgs e)
-        {
-            Starting();
-        }
-
+        
+        //RECIEVING FILES****************************************************
         private void Get_Click(object sender, EventArgs e)
         {
             HideEverything();
@@ -137,7 +138,7 @@ namespace Mutlicast
             this.Bounds = windowsize;
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void RecieveDirectory(object sender, EventArgs e)
         {
             HideEverything();
             string filename = (openDlg.ShowDialog() == DialogResult.OK) ? openDlg.FileName : null;
@@ -154,9 +155,12 @@ namespace Mutlicast
             Rectangle windowsize = new Rectangle(400, 500, Recieving.Width + 25, Recieving.Height + 50);
             Recieving.Bounds = position;
             this.Bounds = windowsize;
+
+            Clock.Tick += new EventHandler(RecivingUpdater);
+            Clock.Start();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void ChangeDirectory(object sender, EventArgs e)
         {
             string filename = (openDlg.ShowDialog() == DialogResult.OK) ? openDlg.FileName : null;
             if (filename != null)
@@ -168,13 +172,22 @@ namespace Mutlicast
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+
+        //Cancels*********************************************************
+        private void CancelSelect(object sender, EventArgs e)
+        {
+            Starting();
+        }
+        private void CancelSending(object sender, EventArgs e)
+        {
+            Sender();
+        }
+        private void CancelRecieve(object sender, EventArgs e)
         {
             HideEverything();
             GetFile.Show();
         }
-
-        private void button2_Click(object sender, EventArgs e)
+        private void CancelGet(object sender, EventArgs e)
         {
             Starting();
         }
