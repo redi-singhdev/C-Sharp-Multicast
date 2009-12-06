@@ -124,6 +124,11 @@ namespace Multicast_test
 			}
 		}
 		
+		
+		public bool GetReceiveStatus(){
+			return receive_thread.IsAlive;
+		}
+		
 		private void receive()
 		{
 			try{
@@ -134,7 +139,7 @@ namespace Multicast_test
 						receiver.Receive(b);
 						lock(receive_buffer.SyncRoot)
 							receive_buffer.Push( b);
-					}catch(System.Net.Sockets.SocketException e){
+					}catch{
 						Console.WriteLine("Bad packet received. Sender should slow down a bit?");
 					}
 				}

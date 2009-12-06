@@ -21,8 +21,8 @@ namespace Multicast_test
 			file_stream = new FileStreamer(file_name);
 		}
 		
-		public void SetWriteFile(String file_name){
-			
+		public void SetWriteFile(String file_name, Int64 size){
+			file_stream = new FileStreamer(file_name, size);
 		}
 		
 		// returns true if streaming started
@@ -35,6 +35,10 @@ namespace Multicast_test
 		}
 		
 		private bool ReceiveChecker(){
+			if (file_stream != null || network.GetReceiveStatus() == false){
+				return true;
+			}
+			
 			byte[] b;
 			
 			do{
