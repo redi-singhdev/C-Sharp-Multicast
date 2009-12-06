@@ -12,7 +12,6 @@ namespace Mutlicast
 {
     public partial class Form1 : Form
     {
-        bool changed = false;
         OpenFileDialog openDlg = new OpenFileDialog();
 
         Timer Clock;
@@ -76,7 +75,6 @@ namespace Mutlicast
                 StreamReader rend = new StreamReader(filename);
                 TextBox.Text = rend.ReadToEnd();
                 rend.Close();
-                changed = false;
                 Sender();
             }
         }
@@ -86,9 +84,7 @@ namespace Mutlicast
         }
 
         //Form Modifiers*****************************************************
-        
-        
-        
+        //**********************************************************
         private void Starting()
         {
 
@@ -124,9 +120,9 @@ namespace Mutlicast
             Clock.Start();
         }
 
-       
 
-        
+
+
         //RECIEVING FILES****************************************************
         private void Get_Click(object sender, EventArgs e)
         {
@@ -147,7 +143,6 @@ namespace Mutlicast
                 StreamReader rend = new StreamReader(filename);
                 TextBox.Text = rend.ReadToEnd();
                 rend.Close();
-                changed = false;
             }
 
             Recieving.Show();
@@ -168,7 +163,6 @@ namespace Mutlicast
                 StreamReader rend = new StreamReader(filename);
                 TextBox.Text = rend.ReadToEnd();
                 rend.Close();
-                changed = false;
             }
         }
 
