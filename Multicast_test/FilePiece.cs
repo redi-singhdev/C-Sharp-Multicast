@@ -19,6 +19,7 @@ namespace Multicast_test
 		 */
 		
 		public const int data_size = 1024;
+		public const int header_size = 4+8+16;
 		
 		public byte[] data;
 		public Int64 number;

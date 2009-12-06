@@ -15,6 +15,9 @@ namespace Multicast_test
 		Boolean writing;
 		Int64 expected_size;
 		
+		public bool GetFileStatus(){
+			return (position >= expected_size);
+		}
 		
 		public FileStreamer(string file_to_read)
 		{
@@ -31,6 +34,7 @@ namespace Multicast_test
 		}
 		
 		public FileStreamer(string file_to_write, Int64 size){
+			// warning: overwrites by default
 			writing = true;
 			path = file_to_write;
 			FileInfo fi = new FileInfo(path);

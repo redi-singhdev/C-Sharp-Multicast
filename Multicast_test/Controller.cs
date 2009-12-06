@@ -10,6 +10,7 @@ namespace Multicast_test
 		FileStreamer file_stream;
 		networking network;
 		
+		
 		public Controller(string filename, string ip, int port)
 		{
 			network = new networking(ip, port);
@@ -33,9 +34,20 @@ namespace Multicast_test
 			return true;
 		}
 		
-		private void ReceiveHandler(){
+		private bool ReceiveChecker(){
+			byte[] b;
 			
+			do{
+				b = network.PopReceiveBuffer();
+				// we have data in b! Deal with it.
+				FilePiece piece = FilePiece.parse_packet(b);
+				if (piece != null){
+					file_stream.WritePiece(piece);
+				}
+				
+			}while (b != null);
 			
+			return file_stream.GetFileStatus();
 		}
 	}
 }

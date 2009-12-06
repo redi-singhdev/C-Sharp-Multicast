@@ -6,6 +6,8 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
+using System.Collections;
+
 
 namespace Multicast_test
 {
@@ -17,11 +19,14 @@ namespace Multicast_test
 		private int port;
 		private Socket sender;
 		private Socket receiver;
+		private Thread receive_thread;
+		private Stack receive_buffer;
+
 		
 		
 		public networking(string address, int port_num)
 		{
-			
+			receive_buffer = new Stack();
 			try{
 				
 				ip = IPAddress.Parse(address);
@@ -74,11 +79,17 @@ namespace Multicast_test
 		public void start_receiving(){
 			// start the receive thread right away!
 			
-			Thread Receive = new Thread(new ThreadStart(receive));
-			Receive.IsBackground = true;
+			receive_thread = new Thread(new ThreadStart(receive));
+			receive_thread.IsBackground = true;
 			
-			Receive.Start();
+			receive_thread.Start();
 		}
+		
+		public void stop_receiving(){
+			
+			receive_thread.Abort();
+		}
+		
 		
 		
 		public void send(byte[] b)
@@ -103,17 +114,29 @@ namespace Multicast_test
 			send( piece.get_packet());
 		}
 		
+		public byte[] PopReceiveBuffer(){
+			lock(receive_buffer.SyncRoot){
+				if (receive_buffer.Count > 0){
+					return (byte[])receive_buffer.Pop();
+				}else{
+					return (byte[])null;
+				}
+			}
+		}
+		
 		private void receive()
 		{
 			try{
 				while(true) { 
-					byte[] b=new byte[20];
-					Console.WriteLine("Waiting for data..");
-					
-					// receive up to 20 bytes
-					receiver.Receive(b);
-					string str = System.Text.Encoding.ASCII.GetString(b,0,b.Length);
-					Console.WriteLine("Received: " + str.Trim());
+					try{
+						byte[] b=new byte[FilePiece.data_size + FilePiece.header_size];
+						// receive up to FilePiece bytes
+						receiver.Receive(b);
+						lock(receive_buffer.SyncRoot)
+							receive_buffer.Push( b);
+					}catch(System.Net.Sockets.SocketException e){
+						Console.WriteLine("Bad packet received. Sender should slow down a bit?");
+					}
 				}
 			}catch(System.Net.Sockets.SocketException e) {
 				Console.Error.WriteLine(e.Message);
