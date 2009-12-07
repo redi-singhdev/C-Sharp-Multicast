@@ -66,8 +66,7 @@ namespace Multicast_test
 		
 		public byte[] GetFileName(){
 			FileInfo fi = new FileInfo(path);
-			UnicodeEncoding text = new UnicodeEncoding();
-			return text.GetBytes(fi.Name);
+			return Encoding.ASCII.GetBytes(fi.Name);
 		}
 		
 		public Stack GetRequiredPieces(){
