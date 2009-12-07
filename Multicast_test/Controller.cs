@@ -227,10 +227,10 @@ namespace Multicast_test
 			Stack missing_pieces = file_stream.GetRequiredPieces();
 			if (missing_pieces != null){
 				while ( missing_pieces.Count >0){
-					byte[] b = FilePiece.get_missing_packet((Int64)missing_pieces.Pop());
-					if (b!= null){
-						bytes_sent += b.Length;
-						network.send();
+					byte[] bytes = FilePiece.get_missing_packet((Int64)missing_pieces.Pop());
+					if (bytes!= null){
+						bytes_sent += bytes.Length;
+						network.send(bytes);
 					}
 				}
 			}
