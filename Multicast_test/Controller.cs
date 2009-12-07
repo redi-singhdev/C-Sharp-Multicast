@@ -30,7 +30,7 @@ namespace Multicast_test
 		public double sending_speed; // bytes/second
 		
 		// constants
-		const double starting_speed = 2048.0;
+		const double starting_speed = 100000.0; // 100kb/s
 		const double change_without_error_increase = 1.05;
 		const double change_with_error_decrease = 0.90;
 		

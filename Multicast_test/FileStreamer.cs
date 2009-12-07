@@ -180,6 +180,9 @@ namespace Multicast_test
 			if (expected_size <= 0){
 				return (double)0;
 			}
+			if (fs.Position >= expected_size){
+				return (double)1;
+			}
 			return (double)fs.Position/(double)expected_size;
 		}
 		
