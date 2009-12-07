@@ -155,7 +155,8 @@ namespace Multicast_test
 					for (int i = file_name.Length; i < file_name.Length+8; i++){
 						file_size[i- file_name.Length] = b[i];
 					}
-					new_file.file_size = Int64.Parse(BitConverter.ToString(file_size));
+					
+					new_file.file_size = BitConverter.ToInt64(file_size, 0);
 					
 					byte[] user_name = new byte[255];
 					for (int i = 255+8; i < file_name.Length+8+user_name.Length; i++){
