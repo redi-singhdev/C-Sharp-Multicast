@@ -75,7 +75,7 @@ namespace Multicast_test
 			}
 			byte[] checksum = new byte[16];
 			for(int i = 12; i < 28; i++){
-				checksum[i] = packet[i];
+				checksum[i-12] = packet[i];
 			}
 			System.ArraySegment<byte> data_segment = new System.ArraySegment<byte>(packet, 28, packet.Length-28);
 			
