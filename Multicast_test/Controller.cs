@@ -124,7 +124,7 @@ namespace Multicast_test
 			for (int i = 0; i < message.Length ; i ++){
 				message[i] = message[i-writer];
 				if (message[i] == 0){
-					writer--;
+					writer++;
 				}
 			}
 		}
