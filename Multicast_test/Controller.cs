@@ -89,38 +89,25 @@ namespace Multicast_test
 		public List<List<string>> GetFilesAvailable(){
 			// uses the files_available array to make an array of files available
 			
-			List<files_available> files = new List<files_available>();
-			files.AddRange(files_available);
 			
 			DateTime cur_time = DateTime.Now;
 			
 			List<files_available> files_to_delete = new List<files_available>();
 			
-			foreach( files_available file in files){
+			foreach( files_available file in files_available){
 				if ((cur_time - file.updated).TotalSeconds > MAX_AGE_FILES){
 					files_to_delete.Add(file);
 					continue;
 				}
-				
-				foreach (files_available compared_file in files){
-					if (compared_file.file_name.Equals(file.file_name) && 
-						compared_file.file_size.Equals(file.file_size) &&
-						compared_file.user_name.Equals(file.user_name) &&
-						!compared_file.updated.Equals(file.updated)){
-						// everything but time
-						files_to_delete.Add(file);
-						continue;
-					}
-				}
 			}
 			foreach (files_available file in files_to_delete){
-				files.Remove(file);
+				files_available.Remove(file);
 			}
 			
 			List<List<string>> stringified = new List<List<string>>();
 			
 			
-			foreach (files_available file in files){
+			foreach (files_available file in files_available){
 				stringified.Add(new List<string>{
 					file.file_name, 
 					file.file_size.ToString(), 
@@ -173,8 +160,18 @@ namespace Multicast_test
 					
 					new_file.updated = DateTime.Now;
 					
-					
+					// look for a similar, but older entry. Delete it! (only first instance)
+					for (int i = 0; i < files_available.Count ; i++){
+						if (files_available[i].file_name.Equals(new_file.file_name) && 
+							files_available[i].file_size.Equals(new_file.file_size) &&
+							files_available[i].user_name.Equals(new_file.user_name)){
+							// everything but time
+							files_available.Remove(files_available[i]);
+							break;
+						}
+					}
 					files_available.Add(new_file);
+					
 					
 				}
 				
