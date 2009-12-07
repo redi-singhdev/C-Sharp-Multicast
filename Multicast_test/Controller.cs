@@ -232,7 +232,7 @@ namespace Multicast_test
 		
 		public bool StartSending(){
 			//returns true if it succeeds on starting the send
-			if (file_stream != null){
+			if (file_stream == null){
 				return false;
 			}
 			start_time = DateTime.Now;
