@@ -15,19 +15,19 @@ namespace Multicast_test
 	
 	public class Controller
 	{
-		FileStreamer file_stream;
-		networking network;
+		public FileStreamer file_stream;
+		public networking network;
 		
-		String user_name;
-		List<files_available> files_available;
+		public String user_name;
+		public List<files_available> files_available;
 		
 		// statistics
-		Int64 bytes_sent;
-		Int64 bytes_received;
-		Int64 packets_error;
-		DateTime start_time;
+		public Int64 bytes_sent;
+		public Int64 bytes_received;
+		public Int64 packets_error;
+		public DateTime start_time;
 		
-		double sending_speed; // bytes/second
+		public double sending_speed; // bytes/second
 		
 		// constants
 		const double starting_speed = 2048.0;
