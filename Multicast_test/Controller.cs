@@ -46,7 +46,7 @@ namespace Multicast_test
 			network = new networking(ip, port);
 			reset_stats();
 			
-			user_name = "";
+			user_name = "Bob";
 			files_available = new List<files_available>();
 			// don't init filestreamer yet
 			
@@ -153,12 +153,10 @@ namespace Multicast_test
 					for (int i = 0; i < file_name.Length; i++){
 						file_name[i] = b[i];
 					}
-					remove_nulls( ref file_name);
 					
 					
 					
 					new_file.file_name = Encoding.UTF8.GetString(file_name);
-					new_file.file_name.TrimStart(' ');
 					
 					
 					byte[] file_size = new byte[8];
