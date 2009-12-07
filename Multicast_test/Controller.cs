@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using System.Collections.Generic;
 
 namespace Multicast_test
 {
@@ -18,7 +19,7 @@ namespace Multicast_test
 		networking network;
 		
 		String user_name;
-		Stack files_available;
+		List<files_available> files_available;
 		
 		// statistics
 		Int64 bytes_sent;
@@ -46,7 +47,7 @@ namespace Multicast_test
 			reset_stats();
 			
 			user_name = "";
-			files_available = new Stack();
+			files_available = new List<files_available>();
 			// don't init filestreamer yet
 		}
 		
@@ -55,6 +56,7 @@ namespace Multicast_test
 			bytes_sent = 0;
 			packets_error = 0;
 			sending_speed = starting_speed;
+			files_available = new List<files_available>();
 		}
 		
 		public double[] GetStats(){
@@ -68,7 +70,6 @@ namespace Multicast_test
 		}
 		
 		public void SendFileInfo(){
-			// TODO: Fill this in
 			if (file_stream == null){
 				return;
 			}
@@ -81,13 +82,12 @@ namespace Multicast_test
 			FilePiece piece = new FilePiece(MESSAGE_FILEINFO , b);
 			
 			network.send(piece.get_packet());
-			
 		}
 		
-		public string[] GetFilesAvailable(){
+		public List<List<string>> GetFilesAvailable(){
 			// uses the files_available array to make an array of files available
 			
-			ArrayList files = new ArrayList();
+			List<files_available> files = new List<files_available>();
 			files.AddRange(files_available);
 			
 			DateTime cur_time = DateTime.Now;
@@ -109,9 +109,17 @@ namespace Multicast_test
 					}
 				}
 			}
-			string[] unique_files = new String[files.Count];
+			List<List<string>> stringified = new List<List<string>>();
 			
-			return unique_files;
+			foreach (files_available file in files){
+				stringified.Add(new List<string>{
+					file.file_name, 
+					file.file_size.ToString(), 
+					file.user_name});
+			}
+			
+			
+			return stringified;
 		}
 		
 		
@@ -154,7 +162,7 @@ namespace Multicast_test
 					new_file.updated = DateTime.Now;
 					
 					
-					files_available.Push(new_file);
+					files_available.Add(new_file);
 					
 				}
 				
