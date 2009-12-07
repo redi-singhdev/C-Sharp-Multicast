@@ -93,7 +93,9 @@ namespace Multicast_test
 		public void send(byte[] b)
 		{
 			// TODO: Create a feedback loop-thing that can slow down transmission rates
-			
+			if (b == null || b.Length <= 0){
+				return;
+			}
 			try{
 				// send the char array "b" without any special socket flags
 				sender.Send(b,b.Length,SocketFlags.None);
