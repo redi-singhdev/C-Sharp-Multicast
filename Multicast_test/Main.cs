@@ -19,7 +19,7 @@ namespace Multicast_test
 			string file = "/home/adam/Desktop/british-english";
 			Controller control = new Controller("224.1.1.1", 9001);
 			
-			if (true){
+			if (false){
 				control.SetReadFile(file);
 				if (false){
 					while (true){
