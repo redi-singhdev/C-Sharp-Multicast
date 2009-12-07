@@ -114,20 +114,9 @@ namespace Multicast_test
 					file.user_name});
 			}
 			
-			
 			return stringified;
 		}
 		
-		
-		private void remove_nulls(ref byte[] message){
-			int writer = 0;
-			for (int i = 0; i < message.Length ; i ++){
-				message[i] = message[i-writer];
-				if (message[i] == 0){
-					writer++;
-				}
-			}
-		}
 		
 		public void UpdateFilesAvailable(){
 			
@@ -170,7 +159,7 @@ namespace Multicast_test
 					for (int i = 255+8; i < file_name.Length+8+user_name.Length; i++){
 						user_name[i - 8 - file_name.Length] = b[i];
 					}
-					new_file.user_name = Encoding.UTF8.GetString(user_name);
+					new_file.user_name = Encoding.UTF8.GetString(user_name, 0, 255);
 					
 					new_file.updated = DateTime.Now;
 					
@@ -197,6 +186,10 @@ namespace Multicast_test
 		
 		public void SetWriteFile(String file_name, Int64 size){
 			file_stream = new FileStreamer(file_name, size);
+		}
+		
+		public double GetPercent(){
+			return file_stream.GetPercent();
 		}
 		
 		public bool ReceiveChecker(){
