@@ -208,13 +208,15 @@ namespace Multicast_test
 			while (b != null){
 				// we have data in b! Deal with it.
 				FilePiece piece = FilePiece.parse_packet(b);
-				if (piece != null && piece.number > 0){
-					file_stream.WritePiece(piece);
-				}else if (piece.number == MESSAGE_RESEND){
-					// A request for a packet has been sent. 
-					// We're not server, so we don't do anything
-				}
 				
+				if (piece != null){
+					if ( piece.number > 0){
+						file_stream.WritePiece(piece);
+					}else if (piece.number == MESSAGE_RESEND){
+						// A request for a packet has been sent. 
+						// We're not server, so we don't do anything
+					}
+				}
 				b = network.PopReceiveBuffer();
 			}
 			
