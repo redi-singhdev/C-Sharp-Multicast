@@ -201,8 +201,9 @@ namespace Multicast_test
 			
 			byte[] b;
 			
-			do{
-				b = network.PopReceiveBuffer();
+			b = network.PopReceiveBuffer();
+			
+			while (b != null){
 				// we have data in b! Deal with it.
 				FilePiece piece = FilePiece.parse_packet(b);
 				if (piece != null && piece.number > 0){
@@ -212,7 +213,8 @@ namespace Multicast_test
 					// We're not server, so we don't do anything
 				}
 				
-			}while (b != null);
+				b = network.PopReceiveBuffer();
+			}
 			
 			Stack missing_pieces = file_stream.GetRequiredPieces();
 			if (missing_pieces != null){
