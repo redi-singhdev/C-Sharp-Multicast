@@ -251,6 +251,7 @@ namespace Multicast_test
 					received_error = true;
 					packets_error++;
 					network.send(file_stream.GetSpecificChunk(piece.number));
+					bytes_sent += 1024; // TODO: Calculate real number here D:
 				}
 				
 			}while (b != null);
