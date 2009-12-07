@@ -40,7 +40,7 @@ namespace Multicast_test
 		
 		
 		
-		public Controller(string filename, string ip, int port)
+		public Controller(string ip, int port)
 		{
 			network = new networking(ip, port);
 			reset_stats();
@@ -62,8 +62,9 @@ namespace Multicast_test
 			return stats;
 		}
 		
-		public void SetReadFile(String file_name){
+		public bool SetReadFile(String file_name){
 			file_stream = new FileStreamer(file_name);
+			return (file_stream.FileReadReady());
 		}
 		
 		public void SendFileInfo(){

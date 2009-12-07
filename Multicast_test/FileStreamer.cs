@@ -41,6 +41,10 @@ namespace Multicast_test
 			position = 0;
 		}
 		
+		public bool FileReadReady(){
+			return (fs != null);
+		}
+		
 		public FileStreamer(string file_to_write, Int64 size){
 			// warning: overwrites by default
 			writing = true;
