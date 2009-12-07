@@ -94,9 +94,11 @@ namespace Multicast_test
 			
 			DateTime cur_time = DateTime.Now;
 			
+			List<files_available> files_to_delete = new List<files_available>();
+			
 			foreach( files_available file in files){
 				if ((cur_time - file.updated).TotalSeconds > MAX_AGE_FILES){
-					files.Remove(file);
+					files_to_delete.add(file);
 					continue;
 				}
 				
@@ -106,12 +108,17 @@ namespace Multicast_test
 						compared_file.user_name.Equals(file.user_name) &&
 						!compared_file.updated.Equals(file.updated)){
 						// everything but time
-						files.Remove(file);
+						files_to_delete.add(file);
 						continue;
 					}
 				}
 			}
+			foreach (files_available file in files_to_delete){
+				files.Remove(file);
+			}
+			
 			List<List<string>> stringified = new List<List<string>>();
+			
 			
 			foreach (files_available file in files){
 				stringified.Add(new List<string>{
