@@ -155,7 +155,11 @@ namespace Multicast_test
 					}
 					remove_nulls( ref file_name);
 					
+					
+					
 					new_file.file_name = Encoding.UTF8.GetString(file_name);
+					new_file.file_name.TrimStart(' ');
+					
 					
 					byte[] file_size = new byte[8];
 					for (int i = file_name.Length; i < file_name.Length+8; i++){
