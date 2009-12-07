@@ -79,7 +79,7 @@ namespace Multicast_test
 			
 			file_stream.GetFileName().CopyTo(b, 0);
 			System.BitConverter.GetBytes(file_stream.GetExpectedSize()).CopyTo(b, 255);
-			new UnicodeEncoding().GetBytes(user_name).CopyTo(b, 255+8);
+			Encoding.UTF8.GetBytes(user_name).CopyTo(b, 255+8);
 			
 			FilePiece piece = new FilePiece(MESSAGE_FILEINFO , b);
 			
@@ -170,7 +170,7 @@ namespace Multicast_test
 					for (int i = 255+8; i < file_name.Length+8+user_name.Length; i++){
 						user_name[i - 8 - file_name.Length] = b[i];
 					}
-					new_file.user_name = BitConverter.ToString(user_name);
+					new_file.user_name = Encoding.UTF8.GetString(user_name);
 					
 					new_file.updated = DateTime.Now;
 					
