@@ -132,50 +132,52 @@ namespace Multicast_test
 				
 				// we have data in b! Deal with it.
 				FilePiece piece = FilePiece.parse_packet(b);
-				if (piece != null && piece.number > 0){
-					// do nothing. Someone is sending pieces and we don't want that.
-				}else if (piece.number == MESSAGE_FILEINFO){
-					//hey! It's some file info! Parse it and put it on the stack.
-					
-					files_available new_file = new files_available();
-					byte[] file_name = new byte[255];
-					for (int i = 0; i < file_name.Length; i++){
-						file_name[i] = b[i];
-					}
-					
-					
-					
-					new_file.file_name = Encoding.UTF8.GetString(file_name);
-					
-					
-					byte[] file_size = new byte[8];
-					for (int i = file_name.Length; i < file_name.Length+8; i++){
-						file_size[i- file_name.Length] = b[i];
-					}
-					
-					new_file.file_size = BitConverter.ToInt64(file_size, 0);
-					
-					byte[] user_name = new byte[255];
-					for (int i = 255+8; i < file_name.Length+8+user_name.Length; i++){
-						user_name[i - 8 - file_name.Length] = b[i];
-					}
-					new_file.user_name = Encoding.UTF8.GetString(user_name, 0, 255);
-					
-					new_file.updated = DateTime.Now;
-					
-					// look for a similar, but older entry. Delete it! (only first instance)
-					for (int i = 0; i < files_available.Count ; i++){
-						if (files_available[i].file_name.Equals(new_file.file_name) && 
-							files_available[i].file_size.Equals(new_file.file_size) &&
-							files_available[i].user_name.Equals(new_file.user_name)){
-							// everything but time
-							files_available.Remove(files_available[i]);
-							break;
+				if (piece != null){
+					if (piece.number > 0){
+						// do nothing. Someone is sending pieces and we don't want that.
+					}else if (piece.number == MESSAGE_FILEINFO){
+						//hey! It's some file info! Parse it and put it on the stack.
+						
+						files_available new_file = new files_available();
+						byte[] file_name = new byte[255];
+						for (int i = 0; i < file_name.Length; i++){
+							file_name[i] = b[i];
 						}
+						
+						
+						
+						new_file.file_name = Encoding.UTF8.GetString(file_name);
+						
+						
+						byte[] file_size = new byte[8];
+						for (int i = file_name.Length; i < file_name.Length+8; i++){
+							file_size[i- file_name.Length] = b[i];
+						}
+						
+						new_file.file_size = BitConverter.ToInt64(file_size, 0);
+						
+						byte[] user_name = new byte[255];
+						for (int i = 255+8; i < file_name.Length+8+user_name.Length; i++){
+							user_name[i - 8 - file_name.Length] = b[i];
+						}
+						new_file.user_name = Encoding.UTF8.GetString(user_name, 0, 255);
+						
+						new_file.updated = DateTime.Now;
+						
+						// look for a similar, but older entry. Delete it! (only first instance)
+						for (int i = 0; i < files_available.Count ; i++){
+							if (files_available[i].file_name.Equals(new_file.file_name) && 
+								files_available[i].file_size.Equals(new_file.file_size) &&
+								files_available[i].user_name.Equals(new_file.user_name)){
+								// everything but time
+								files_available.Remove(files_available[i]);
+								break;
+							}
+						}
+						files_available.Add(new_file);
+						
+						
 					}
-					files_available.Add(new_file);
-					
-					
 				}
 				
 				b = network.PopReceiveBuffer();
@@ -253,14 +255,16 @@ namespace Multicast_test
 				
 				// we have data in b! Deal with it.
 				FilePiece piece = FilePiece.parse_packet(b);
-				if (piece != null && piece.number > 0){
-					// do nothing. We are not a receiver!
-				}else if (piece.number == MESSAGE_RESEND){
-					// we are server! We must re-send this packet.
-					received_error = true;
-					packets_error++;
-					network.send(file_stream.GetSpecificChunk(piece.number));
-					bytes_sent += 1024; // TODO: Calculate real number here D:
+				if (piece != null){
+					if (piece.number > 0){
+						// do nothing. We are not a receiver!
+					}else if (piece.number == MESSAGE_RESEND){
+						// we are server! We must re-send this packet.
+						received_error = true;
+						packets_error++;
+						network.send(file_stream.GetSpecificChunk(piece.number));
+						bytes_sent += 1024; // TODO: Calculate real number here D:
+					}
 				}
 				b = network.PopReceiveBuffer();
 			}
