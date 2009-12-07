@@ -110,6 +110,8 @@ namespace Multicast_test
 			}
 		}
 		
+		
+		
 		public void send_file_piece(FilePiece piece){
 			send( piece.get_packet());
 		}
@@ -127,6 +129,10 @@ namespace Multicast_test
 		
 		public bool GetReceiveStatus(){
 			return receive_thread.IsAlive;
+		}
+		
+		public void ClearReceiveBuffer(){
+			receive_buffer.Clear();
 		}
 		
 		private void receive()

@@ -28,11 +28,6 @@ namespace Multicast_test
 		{
 			data = file_data;
 			number = num;
-			if (data.Length != data_size){
-				// data length is wrong! D:
-				data.Initialize();
-				number = -1;
-			}
 		}
 		public byte[] get_checksum(){
 			
@@ -57,8 +52,17 @@ namespace Multicast_test
 			
 		}
 		
+		public static byte[] get_missing_packet(Int64 missing_number){
+			
+			byte[] number_data = System.BitConverter.GetBytes(missing_number);
+			FilePiece piece = new FilePiece(-1, number_data);
+			
+			return piece.get_packet();
+			
+		}
+		
 		static public FilePiece parse_packet(byte[] packet){
-			if (packet.Length < 28){ // header isn't long enough
+			if (packet.Length < 28){ // packet is shorter than the header has to be
 				return null;
 			}
 			Int32 data_length = System.BitConverter.ToInt32(packet, 0);
@@ -67,7 +71,7 @@ namespace Multicast_test
 			}
 			Int64 piece_number = System.BitConverter.ToInt64(packet, 4);
 			if (piece_number < 0){ // can't have less than 0 piece number
-				return null;
+				// TODO: this is a message. Do something special...?
 			}
 			byte[] checksum = new byte[16];
 			for(int i = 12; i < 28; i++){
