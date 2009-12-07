@@ -276,7 +276,7 @@ namespace Multicast_test
 			
 			// returns true if all pieces have been sent. 
 			//Does some sending if there are things to send
-			if (file_stream.GetFileStatus()){
+			if (!file_stream.GetFileStatus()){
 				double time_spent = (DateTime.Now.ToUniversalTime() - start_time).TotalSeconds;
 				while (sending_speed > (double)bytes_sent/(double)time_spent){
 					byte[] bytes = file_stream.GetNextChunk();
@@ -285,7 +285,7 @@ namespace Multicast_test
 						bytes_sent += bytes.Length;
 					}else{
 						// exit loop if we're done sending file
-						break;
+						return true;
 					}
 				}
 				return false;
