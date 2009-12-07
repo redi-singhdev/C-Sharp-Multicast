@@ -11,8 +11,6 @@ using System.Collections;
 
 namespace Multicast_test
 {
-	
-	
 	public class networking
 	{
 		private IPAddress ip;

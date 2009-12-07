@@ -101,7 +101,7 @@
             this.Browse.TabIndex = 3;
             this.Browse.Text = "Browse";
             this.Browse.UseVisualStyleBackColor = true;
-            this.Browse.Click += new System.EventHandler(this.button1_Click);
+            this.Browse.Click += new System.EventHandler(this.BrowseUpload);
             // 
             // FileList
             // 
@@ -152,7 +152,7 @@
             this.Cancel.TabIndex = 10;
             this.Cancel.Text = "Cancel";
             this.Cancel.UseVisualStyleBackColor = true;
-            this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
+            this.Cancel.Click += new System.EventHandler(this.CancelSelect);
             // 
             // FileName
             // 
@@ -179,7 +179,7 @@
             this.button2.TabIndex = 21;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.CancelGet);
             // 
             // button1
             // 
@@ -189,7 +189,7 @@
             this.button1.TabIndex = 20;
             this.button1.Text = "Change...";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.button1.Click += new System.EventHandler(this.RecieveDirectory);
             // 
             // label5
             // 
@@ -226,7 +226,7 @@
             this.button3.TabIndex = 28;
             this.button3.Text = "Change...";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.ChangeDirectory);
             // 
             // label9
             // 
@@ -245,7 +245,6 @@
             this.button4.TabIndex = 24;
             this.button4.Text = "Cancel";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // RecievingBar
             // 
@@ -291,7 +290,7 @@
             this.button5.TabIndex = 31;
             this.button5.Text = "Cancel";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.CancelSending);
             // 
             // SendingBar
             // 
