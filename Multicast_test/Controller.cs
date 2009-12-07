@@ -119,6 +119,16 @@ namespace Multicast_test
 		}
 		
 		
+		private void remove_nulls(ref byte[] message){
+			int writer = 0;
+			for (int i = 0; i < message.Length ; i ++){
+				if (message[i] == 0){
+					writer--;
+				}
+				message[i] = message[writer];
+			}
+		}
+		
 		public void UpdateFilesAvailable(){
 			
 			if (network.GetReceiveStatus() == false){
@@ -143,7 +153,7 @@ namespace Multicast_test
 					for (int i = 0; i < file_name.Length; i++){
 						file_name[i] = b[i];
 					}
-					
+					remove_nulls( ref file_name);
 					
 					new_file.file_name = Encoding.UTF8.GetString(file_name);
 					
