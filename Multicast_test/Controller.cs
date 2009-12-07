@@ -217,7 +217,6 @@ namespace Multicast_test
 			
 			// start receiving too, because we need to watch for errors.
 			// we also need to remember to disregard positive file numbers
-			StartReceiving();
 			
 			return true;
 		}
