@@ -133,8 +133,10 @@ namespace Multicast_test
 			
 			byte[] b;
 			
-			do{
-				b = network.PopReceiveBuffer();
+			b = network.PopReceiveBuffer();
+			
+			while (b != null){
+				
 				// we have data in b! Deal with it.
 				FilePiece piece = FilePiece.parse_packet(b);
 				if (piece != null && piece.number > 0){
@@ -168,7 +170,9 @@ namespace Multicast_test
 					
 				}
 				
-			}while (b != null);
+				b = network.PopReceiveBuffer();
+				
+			}
 			
 		}
 		
