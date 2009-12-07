@@ -299,6 +299,7 @@ namespace Multicast_test
 					}else{
 						return true;
 					}
+					break;
 				}
 				return false;
 			}else{
