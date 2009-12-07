@@ -207,10 +207,14 @@ namespace Multicast_test
 			
 			while (b != null){
 				// we have data in b! Deal with it.
+				bytes_received += b.Length;
+				
 				FilePiece piece = FilePiece.parse_packet(b);
 				
 				if (piece != null){
 					if ( piece.number > 0){
+						
+						
 						file_stream.WritePiece(piece);
 					}else if (piece.number == MESSAGE_RESEND){
 						// A request for a packet has been sent. 
@@ -223,7 +227,11 @@ namespace Multicast_test
 			Stack missing_pieces = file_stream.GetRequiredPieces();
 			if (missing_pieces != null){
 				while ( missing_pieces.Count >0){
-					network.send(FilePiece.get_missing_packet((Int64)missing_pieces.Pop()));
+					byte[] b = FilePiece.get_missing_packet((Int64)missing_pieces.Pop());
+					if (b!= null){
+						bytes_sent += b.Length;
+						network.send();
+					}
 				}
 			}
 			

@@ -117,6 +117,7 @@ namespace Multicast_test
 		public byte[] PopReceiveBuffer(){
 			lock(receive_buffer.SyncRoot){
 				if (receive_buffer.Count > 0){
+					
 					return (byte[])receive_buffer.Pop();
 				}else{
 					return (byte[])null;
@@ -146,7 +147,7 @@ namespace Multicast_test
 					try{
 						byte[] b=new byte[FilePiece.data_size + FilePiece.header_size];
 						// receive up to FilePiece bytes
-						receiver.Receive(b);
+						receiver.Receive(b, SocketFlags.None);
 						lock(receive_buffer.SyncRoot)
 							receive_buffer.Push( b);
 					}catch{
