@@ -124,6 +124,12 @@ namespace Multicast_test
 			}
 		}
 		
+		public int GetAmountInReceiveBuffer(){
+			lock(receive_buffer.SyncRoot){
+				return receive_buffer.Count;
+			}
+		}
+		
 		
 		public bool GetReceiveStatus(){
 			return receive_thread.IsAlive;

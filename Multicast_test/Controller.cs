@@ -235,7 +235,7 @@ namespace Multicast_test
 			if (file_stream != null){
 				return false;
 			}
-			start_time = DateTime.Now.ToUniversalTime();
+			start_time = DateTime.Now;
 			
 			// start receiving too, because we need to watch for errors.
 			// we also need to remember to disregard positive file numbers
@@ -283,7 +283,7 @@ namespace Multicast_test
 			// returns true if all pieces have been sent. 
 			//Does some sending if there are things to send
 			if (!file_stream.GetFileStatus()){
-				double time_spent = (DateTime.Now.ToUniversalTime() - start_time).TotalSeconds;
+				double time_spent = (DateTime.Now - start_time).TotalSeconds;
 				while (sending_speed > (double)bytes_sent/(double)time_spent){
 					byte[] bytes = file_stream.GetNextChunk();
 					if (bytes != null){
