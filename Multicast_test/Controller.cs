@@ -98,7 +98,7 @@ namespace Multicast_test
 			
 			foreach( files_available file in files){
 				if ((cur_time - file.updated).TotalSeconds > MAX_AGE_FILES){
-					files_to_delete.add(file);
+					files_to_delete.Add(file);
 					continue;
 				}
 				
@@ -108,7 +108,7 @@ namespace Multicast_test
 						compared_file.user_name.Equals(file.user_name) &&
 						!compared_file.updated.Equals(file.updated)){
 						// everything but time
-						files_to_delete.add(file);
+						files_to_delete.Add(file);
 						continue;
 					}
 				}
