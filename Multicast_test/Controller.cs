@@ -49,6 +49,8 @@ namespace Multicast_test
 			user_name = "";
 			files_available = new List<files_available>();
 			// don't init filestreamer yet
+			
+			network.start_receiving();
 		}
 		
 		public void reset_stats(){
@@ -172,16 +174,6 @@ namespace Multicast_test
 		
 		public void SetWriteFile(String file_name, Int64 size){
 			file_stream = new FileStreamer(file_name, size);
-		}
-	
-		
-		// returns true if streaming started
-		public bool StartReceiving(){
-			if (file_stream != null){
-				return false;
-			}
-			network.start_receiving();
-			return true;
 		}
 		
 		public bool ReceiveChecker(){
