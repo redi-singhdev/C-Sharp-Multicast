@@ -255,7 +255,7 @@ namespace Multicast_test
 		
 		public bool SendChecker(){
 			// returns true if we're done sending
-			if (file_stream == null ||file_stream.GetFileStatus()){
+			if (file_stream == null ){
 				return true;
 			}
 			
@@ -280,7 +280,10 @@ namespace Multicast_test
 				b = network.PopReceiveBuffer();
 			}
 			
-			
+			if (file_stream.GetFileStatus()){
+				return true;
+				// done sending, just sending corrections
+			}
 			
 			// now that we're caught up, adjust the speed based on errors.
 			if (received_error){
