@@ -135,7 +135,7 @@ namespace Multicast_test
 			byte[] b = GetNextChunk();
 			FilePiece piece;
 			if (b != null){
-				piece = new FilePiece(position, b);
+				piece = new FilePiece(fs.Position/FilePiece.data_size -1, b);
 			}else{
 				piece = null;
 			}
