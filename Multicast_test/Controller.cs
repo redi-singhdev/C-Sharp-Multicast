@@ -283,7 +283,7 @@ namespace Multicast_test
 			// returns true if all pieces have been sent. 
 			//Does some sending if there are things to send
 			if (!file_stream.GetFileStatus()){
-				double time_spent = (DateTime.Now - start_time).TotalSeconds;
+				double time_spent = (DateTime.Now.AddSeconds(1) - start_time).TotalSeconds;
 				while (sending_speed > (double)bytes_sent/(double)time_spent){
 					
 					FilePiece fp = file_stream.GetNextPiece();
