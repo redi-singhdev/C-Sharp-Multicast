@@ -285,12 +285,18 @@ namespace Multicast_test
 			if (!file_stream.GetFileStatus()){
 				double time_spent = (DateTime.Now - start_time).TotalSeconds;
 				while (sending_speed > (double)bytes_sent/(double)time_spent){
-					byte[] bytes = file_stream.GetNextPiece().get_packet();
-					if (bytes != null){
-						network.send(bytes);
-						bytes_sent += bytes.Length;
+					
+					FilePiece fp = file_stream.GetNextPiece();
+					if (fp != null){
+						byte[] bytes = fp.get_packet();
+						if (bytes != null){
+							network.send(bytes);
+							bytes_sent += bytes.Length;
+						}else{
+							// exit loop if we're done sending file
+							return true;
+						}
 					}else{
-						// exit loop if we're done sending file
 						return true;
 					}
 				}
