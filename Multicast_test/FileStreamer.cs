@@ -180,7 +180,7 @@ namespace Multicast_test
 			if (expected_size <= 0){
 				return (double)0;
 			}
-			return (double)position/(double)expected_size;
+			return (double)fs.Position/(double)expected_size;
 		}
 		
 		
