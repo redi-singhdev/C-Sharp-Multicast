@@ -24,7 +24,7 @@ namespace Multicast_test
 		// statistics
 		public Int64 bytes_sent;
 		public Int64 bytes_received;
-		public Int64 packets_error;
+		public Int64 packets_error; //number of error messages received
 		public DateTime start_time;
 		
 		public double sending_speed; // bytes/second
@@ -207,11 +207,15 @@ namespace Multicast_test
 			
 			while (b != null){
 				// we have data in b! Deal with it.
+				bytes_received += b.Length;
+				
 				FilePiece piece = FilePiece.parse_packet(b);
 				
 				if (piece != null){
 					if ( piece.number > 0){
-						file_stream.WritePiece(piece);
+						Console.WriteLine("Got piece "+piece.number);
+						
+						file_stream.WriteSpecificPiece(piece);
 					}else if (piece.number == MESSAGE_RESEND){
 						// A request for a packet has been sent. 
 						// We're not server, so we don't do anything
@@ -220,12 +224,17 @@ namespace Multicast_test
 				b = network.PopReceiveBuffer();
 			}
 			
-			Stack missing_pieces = file_stream.GetRequiredPieces();
+			List<Int64> missing_pieces = file_stream.GetRequiredPieces();
 			if (missing_pieces != null){
-				while ( missing_pieces.Count >0){
-					network.send(FilePiece.get_missing_packet((Int64)missing_pieces.Pop()));
+				foreach (Int64 num in missing_pieces){
+					byte[] bytes = FilePiece.get_missing_packet(num);
+					if (bytes!= null){
+						bytes_sent += bytes.Length;
+						network.send(bytes);
+					}
 				}
 			}
+				
 			
 			return file_stream.GetFileStatus();
 		}
@@ -246,7 +255,7 @@ namespace Multicast_test
 		
 		public bool SendChecker(){
 			// returns true if we're done sending
-			if (file_stream == null ||file_stream.GetFileStatus()){
+			if (file_stream == null ){
 				return true;
 			}
 			
@@ -265,13 +274,16 @@ namespace Multicast_test
 						received_error = true;
 						packets_error++;
 						network.send(file_stream.GetSpecificChunk(piece.number));
-						bytes_sent += 1024; // TODO: Calculate real number here D:
+						bytes_sent += FilePiece.data_size+FilePiece.header_size; // TODO: Calculate real number here D:
 					}
 				}
 				b = network.PopReceiveBuffer();
 			}
 			
-			
+			if (file_stream.GetFileStatus()){
+				return true;
+				// done sending, just sending corrections
+			}
 			
 			// now that we're caught up, adjust the speed based on errors.
 			if (received_error){

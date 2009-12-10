@@ -3,6 +3,8 @@ using System;
 using System.IO;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
+
 
 namespace Multicast_test
 {
@@ -16,7 +18,7 @@ namespace Multicast_test
 		Boolean writing;
 		Int64 expected_size;
 		
-		Stack received_pieces; // stack of numbers
+		List<Int64> received_pieces; // List of numbers
 		
 		public bool GetFileStatus(){
 			if ((position >= expected_size) && 
@@ -54,7 +56,8 @@ namespace Multicast_test
 				fi.Delete();
 			}
 			expected_size = size;
-			received_pieces = new Stack();
+			received_pieces = new List<Int64>(1);
+			received_pieces.Add(-1);
 			fs = File.OpenWrite(path);
 			position = 0;
 			
@@ -69,23 +72,19 @@ namespace Multicast_test
 			return Encoding.UTF8.GetBytes(fi.Name.ToString());
 		}
 		
-		public Stack GetRequiredPieces(){
+		public List<Int64> GetRequiredPieces(){
 			if (received_pieces.Count > 1){
-				object[] objects = received_pieces.ToArray();
-				Int64[] sorted_ints = new Int64[objects.Length];
-				for (Int64 i = 0; i < sorted_ints.Length; i++){
-					sorted_ints[i] = (Int64)objects[i];
-				}
-				Array.Sort(sorted_ints);
-				
-				
-				Stack required_pieces = new Stack();
-				Int64 pos = 0;
-				for( Int64 i = sorted_ints[0]; i < sorted_ints[sorted_ints.Length-1] ; i++){
-					if (sorted_ints[pos] <= i){
+				Console.WriteLine("We know we're missing packets");
+				received_pieces.Sort();
+				List<Int64> required_pieces = new List<Int64>();
+				int pos = 0;
+				for( Int64 i = received_pieces[0]; i < received_pieces[received_pieces.Count-1] ; i++){
+					if (received_pieces[pos] <= i){
 						pos++;
 					}else{
-						required_pieces.Push(i);
+						if (i >0){
+							required_pieces.Add(i);
+						}
 					}
 				}
 				return required_pieces;
@@ -95,7 +94,7 @@ namespace Multicast_test
 		}
 		
 		public byte[] GetSpecificChunk(Int64 number){
-			if (writing){
+			if (writing || number < 0){
 				// polymorphism in action!
 				return null;
 			}
@@ -156,21 +155,28 @@ namespace Multicast_test
 			// NOTE: Requires that all data pieces be EXACTLY data_size in length! (see FilePiece.cs)
 			if (!writing){
 				// polymorphism in action!
+				Console.WriteLine("We're not writing. Don't call this function!");
 				return;
 			}
 			
 			if (piece.number < 0){
+				Console.WriteLine("Don't tell us to write a non-existant piece.");
 				return;
 			}
 			
 			fs.Seek(piece.number * FilePiece.data_size, SeekOrigin.Begin);
 			fs.Write(piece.data, 0, piece.data.Length);
 			
-			if (received_pieces.Count <= 1 && (Int64)received_pieces.Peek() == piece.number - 1){
+			if (received_pieces.Count <= 1 && received_pieces[0].Equals(piece.number - 1)){
 				received_pieces.Clear();
-				received_pieces.Push(piece.number);
+				received_pieces.Add(piece.number);
 			}else{
-				received_pieces.Push(piece.number);
+				if (received_pieces.Contains(piece.number)){
+					Console.WriteLine("Detected Duplicate packet");
+					received_pieces.Remove(piece.number);
+				}else{
+					received_pieces.Add(piece.number);
+				}
 			}
 			
 		}
