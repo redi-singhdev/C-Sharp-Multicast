@@ -76,12 +76,23 @@ namespace Multicast_test
 				return;
 			}
 			byte[] b = new byte[FilePiece.data_size];
+			for (int i = 0; i < b.Length ; i++){
+				b[i] = 0x000000;
+			}
 			
-			file_stream.GetFileName().CopyTo(b, 0);
+			byte[] file_name = file_stream.GetFileName();
+			file_name.CopyTo(b, 0);
 			System.BitConverter.GetBytes(file_stream.GetExpectedSize()).CopyTo(b, 255);
 			Encoding.UTF8.GetBytes(user_name).CopyTo(b, 255+8);
 			
 			FilePiece piece = new FilePiece(MESSAGE_FILEINFO , b);
+			
+//			Console.WriteLine("Raw data being sent:");
+//			for (int i = 0; i < b.Length; i ++){
+//				Console.Write(b[i].ToString());
+//			}
+//			Console.WriteLine();
+			
 			
 			network.send(piece.get_packet());
 		}
@@ -133,34 +144,18 @@ namespace Multicast_test
 				// we have data in b! Deal with it.
 				FilePiece piece = FilePiece.parse_packet(b);
 				if (piece != null){
-					if (piece.number > 0){
+
+					if (piece.number >= 0){
 						// do nothing. Someone is sending pieces and we don't want that.
 					}else if (piece.number == MESSAGE_FILEINFO){
 						//hey! It's some file info! Parse it and put it on the stack.
+						byte[] data = piece.get_data();
+						
 						
 						files_available new_file = new files_available();
-						byte[] file_name = new byte[255];
-						for (int i = 0; i < file_name.Length; i++){
-							file_name[i] = b[i];
-						}
-						
-						
-						
-						new_file.file_name = Encoding.UTF8.GetString(file_name);
-						
-						
-						byte[] file_size = new byte[8];
-						for (int i = file_name.Length; i < file_name.Length+8; i++){
-							file_size[i- file_name.Length] = b[i];
-						}
-						
-						new_file.file_size = BitConverter.ToInt64(file_size, 0);
-						
-						byte[] user_name = new byte[255];
-						for (int i = 255+8; i < file_name.Length+8+user_name.Length; i++){
-							user_name[i - 8 - file_name.Length] = b[i];
-						}
-						new_file.user_name = Encoding.UTF8.GetString(user_name, 0, 255);
+						new_file.file_name = Encoding.UTF8.GetString(data, 0, 255);
+						new_file.file_size = BitConverter.ToInt64(data, 255);
+						new_file.user_name = Encoding.UTF8.GetString(data, 255+8, 255);
 						
 						new_file.updated = DateTime.Now;
 						

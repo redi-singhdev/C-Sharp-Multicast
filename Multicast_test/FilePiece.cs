@@ -34,24 +34,33 @@ namespace Multicast_test
 			return header_size + data.Length;
 		}
 		
+		public byte[] get_data(){
+			return data;
+		}
+		
+		
 		public byte[] get_checksum(){
 			
 			MD5 checksum = new MD5CryptoServiceProvider();
 			byte[] sum = checksum.ComputeHash(data);
 			return sum;
 		}
+//		public void send(){
+//			send(this.get_packet());
+//		}
+		
 		public byte[] get_packet(){
 			
 			byte[] data_length = System.BitConverter.GetBytes(data.Length);
 			byte[] piece_number = System.BitConverter.GetBytes(number);
 			byte[] checksum = get_checksum();
 			
-			byte[] b = new byte[4 + 8 + 16 + data.Length]; // 4 + 8 + 16 + data_length
+			byte[] b = new byte[header_size + data_size]; // 4 + 8 + 16 + data_size
 			
 			data_length.CopyTo(b, 0);
 			piece_number.CopyTo(b,4);
 			checksum.CopyTo(b, 12);
-			data.CopyTo(b,28);
+			data.CopyTo(b,header_size);
 			
 			return b;
 			
@@ -68,7 +77,7 @@ namespace Multicast_test
 		
 		static public FilePiece parse_packet(byte[] packet){
 			
-			if (packet.Length < 28){ // packet is shorter than the header has to be
+			if (packet.Length < header_size){ // packet is shorter than the header has to be
 				return null;
 			}
 			Int32 data_length = System.BitConverter.ToInt32(packet, 0);
@@ -76,16 +85,18 @@ namespace Multicast_test
 				return null;
 			}
 			Int64 piece_number = System.BitConverter.ToInt64(packet, 4);
-			if (piece_number < 0){ // can't have less than 0 piece number
-				// TODO: this is a message. Do something special...?
-			}
+			
 			byte[] checksum = new byte[16];
 			for(int i = 12; i < 28; i++){
 				checksum[i-12] = packet[i];
 			}
-			System.ArraySegment<byte> data_segment = new System.ArraySegment<byte>(packet, 28, packet.Length-28);
 			
-			byte[] data = data_segment.Array;
+			
+			byte[] data = new byte[data_length];
+			for (int i = 0; i < data_length; i++){
+				data[i] = packet[i+header_size];
+			}
+			
 			
 			// do a checksum
 			MD5 check = new MD5CryptoServiceProvider();

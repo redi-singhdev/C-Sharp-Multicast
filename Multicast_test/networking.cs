@@ -119,7 +119,13 @@ namespace Multicast_test
 			lock(receive_buffer.SyncRoot){
 				if (receive_buffer.Count > 0){
 					
-					return (byte[])receive_buffer.Pop();
+					byte[] b = (byte[])receive_buffer.Pop();
+//					Console.WriteLine("Raw packet data:");
+//					for (int i = 0; i < b.Length; i ++){
+//						Console.Write(b[i].ToString());
+//					}
+//					Console.WriteLine();
+					return b;
 				}else{
 					return (byte[])null;
 				}

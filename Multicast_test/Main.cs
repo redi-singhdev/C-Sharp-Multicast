@@ -158,7 +158,7 @@ namespace Multicast_test
 				control.UpdateFilesAvailable();
 				List<List<string>> files = control.GetFilesAvailable();
 				foreach(List<string> info in files){
-					string temp = info[0] + "/" + info[1] + "/" + info[2];
+					string temp = "::" + info[0] + " / " + info[1] + " / " + info[2]+"::";
 					Console.WriteLine(temp);
 				}
 			}
