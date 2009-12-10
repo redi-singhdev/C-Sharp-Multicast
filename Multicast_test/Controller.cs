@@ -273,8 +273,9 @@ namespace Multicast_test
 						// we are server! We must re-send this packet.
 						received_error = true;
 						packets_error++;
-						network.send(file_stream.GetSpecificChunk(piece.number));
-						bytes_sent += FilePiece.data_size+FilePiece.header_size; // TODO: Calculate real number here D:
+						FilePiece specific_piece = new FilePiece(piece.number, file_stream.GetSpecificChunk(piece.number));
+						network.send(specific_piece.get_packet());
+						bytes_sent += specific_piece.get_packet_size();
 					}
 				}
 				b = network.PopReceiveBuffer();

@@ -141,15 +141,6 @@ namespace Multicast_test
 			return piece;
 		}
 		
-		public void WritePiece(FilePiece piece){
-			// WARNING: THIS IS FOR TESTING PURPOSES ONLY
-			if (!writing){
-				// polymorphism in action!
-				return;
-			}
-			fs.Write(piece.data, 0, piece.data.Length);
-			// TODO: Use BeginWrite to make it more responsive
-		}
 		
 		public void WriteSpecificPiece(FilePiece piece){
 			// NOTE: Requires that all data pieces be EXACTLY data_size in length! (see FilePiece.cs)

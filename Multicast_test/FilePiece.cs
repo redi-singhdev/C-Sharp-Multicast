@@ -29,6 +29,11 @@ namespace Multicast_test
 			data = file_data;
 			number = num;
 		}
+		
+		public int get_packet_size(){
+			return header_size + data.Length;
+		}
+		
 		public byte[] get_checksum(){
 			
 			MD5 checksum = new MD5CryptoServiceProvider();
