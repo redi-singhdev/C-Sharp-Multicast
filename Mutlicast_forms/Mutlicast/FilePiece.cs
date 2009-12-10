@@ -62,6 +62,7 @@ namespace Multicast_test
 		}
 		
 		static public FilePiece parse_packet(byte[] packet){
+			
 			if (packet.Length < 28){ // packet is shorter than the header has to be
 				return null;
 			}

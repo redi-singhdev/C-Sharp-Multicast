@@ -49,29 +49,29 @@ namespace Mutlicast
         //Timers *****************************************************
         private void RecivingUpdater(object sender, EventArgs e)
         {
+            RecievingBar.Value = (int)(controller.GetPercent() * 100);
             if (controller.ReceiveChecker())
             {
                 Clock.Tick -= new EventHandler(RecivingUpdater);
                 Clock.Stop();
-
-                MessageBox.Show("Dun!");
+                System.Media.SystemSounds.Exclamation.Play();
+                MessageBox.Show("Yous Got!");
             }
-            RecievingBar.Value = (int)(controller.GetPercent() * 100);
-
-            label1.Text = controller.network.GetAmountInReceiveBuffer().ToString();
-            label2.Text = controller.GetStats()[2].ToString();
+            label1.Text = controller.GetStats()[0].ToString();
+            label2.Text = controller.GetStats()[1].ToString();
             
         }
 
         private void SendingUpdater(object sender, EventArgs e)
         {
+            SendingBar.Value = (int)(controller.GetPercent() * 100);
             if (controller.SendChecker())
             {
                 Clock.Tick -= new EventHandler(SendingUpdater);
                 Clock.Stop();
-                SendingBar.Value = 100;
-
+                System.Media.SystemSounds.Exclamation.Play();
                 MessageBox.Show("Dun Sending!!");
+                SendingBar.Value = 100;
             }
             label3.Text = controller.GetStats()[1].ToString();
         }
@@ -84,14 +84,12 @@ namespace Mutlicast
         public void filesupdater(object sender, EventArgs e)
         {
             selected = FileList.SelectedIndex;
-
             FileList.Items.Clear();
             controller.UpdateFilesAvailable();
             List<List<string>> files = controller.GetFilesAvailable();
             foreach (List<string> file in files)
             {
                 string everything = "1***" + file[2] +"***1";
-                textBox1.Text = everything;
                 FileList.Items.Add(everything);
             }
             if (FileList.SelectedItem == null && FileList.Items.Count > 0)
@@ -231,6 +229,7 @@ namespace Mutlicast
         private void CancelSending(object sender, EventArgs e)
         {
             Sender();
+            controller.reset_stats();
         }
         private void CancelRecieve(object sender, EventArgs e)
         {
@@ -241,6 +240,5 @@ namespace Mutlicast
         {
             Starting();
         }
-
     }
 }
