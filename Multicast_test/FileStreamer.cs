@@ -74,7 +74,7 @@ namespace Multicast_test
 		
 		public List<Int64> GetRequiredPieces(){
 			if (received_pieces.Count > 1){
-				Console.WriteLine("We know we're missing packets");
+				Console.WriteLine("We know we're missing packets:" + received_pieces.Count);
 				received_pieces.Sort();
 				List<Int64> required_pieces = new List<Int64>();
 				int pos = 0;
@@ -156,7 +156,7 @@ namespace Multicast_test
 			}
 			
 			fs.Seek(piece.number * FilePiece.data_size, SeekOrigin.Begin);
-			fs.Write(piece.data, 0, piece.data.Length);
+			fs.Write(piece.get_data(), 0, piece.data.Length);
 			
 			if (received_pieces.Count <= 1 && received_pieces[0].Equals(piece.number - 1)){
 				received_pieces.Clear();

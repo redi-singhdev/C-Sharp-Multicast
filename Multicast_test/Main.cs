@@ -119,6 +119,12 @@ namespace Multicast_test
 			case possible.receiveinfo:
 				ReceiveFileInfo();
 							break;
+			case possible.sendfile:
+				SendFile(file);
+							break;
+			case possible.receivefile:
+				ReceiveFile(file);
+							break;
 			default:
 				Console.WriteLine("You didn't tell me what to do.");
 							break;
@@ -158,8 +164,53 @@ namespace Multicast_test
 				control.UpdateFilesAvailable();
 				List<List<string>> files = control.GetFilesAvailable();
 				foreach(List<string> info in files){
-					string temp = "::" + info[0] + " / " + info[1] + " / " + info[2]+"::";
+					string temp = info[0] + " / " + info[1] + " / " + info[2];
 					Console.WriteLine(temp);
+				}
+			}
+			
+		}
+		public static void SendFile(string file){
+			
+			FileInfo fi = new FileInfo(file);
+			if (!fi.Exists){
+				Console.WriteLine("File doesn't exist");
+				return;
+			}
+			
+			Controller control = new Controller(ip, port);
+			control.SetReadFile(file);
+			
+			
+			
+			Console.WriteLine("Sending File info...");
+			while(true){
+				Thread.Sleep(250);
+				if (control.SendChecker()){
+					Console.WriteLine("Done Sending");
+				}else{
+					Console.WriteLine("Sending: " + control.GetPercent());
+				}
+			}
+			
+			
+		}
+		
+		public static void ReceiveFile(string file){
+			FileInfo fi = new FileInfo(file);
+			if (fi.Exists){
+				Console.WriteLine("File exist! Overwriting.");
+				// TODO: Make it ask
+			}
+			
+			Controller control = new Controller(ip, port);
+			control.SetWriteFile(file, 90000);
+			while(true){
+				Thread.Sleep(250);
+				if (control.ReceiveChecker()){
+					Console.WriteLine("Done Receiving");
+				}else{
+					Console.WriteLine("Receiving: " + control.GetPercent());
 				}
 			}
 			

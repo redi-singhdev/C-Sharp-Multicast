@@ -207,7 +207,7 @@ namespace Multicast_test
 				FilePiece piece = FilePiece.parse_packet(b);
 				
 				if (piece != null){
-					if ( piece.number > 0){
+					if ( piece.number >= 0){
 						Console.WriteLine("Got piece "+piece.number);
 						
 						file_stream.WriteSpecificPiece(piece);
