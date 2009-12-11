@@ -83,7 +83,7 @@ namespace Multicast_test
 				return null;
 			}
 			Int32 data_length = System.BitConverter.ToInt32(packet, 0);
-			if (data_length < 0){ // no data
+			if (data_length <= 0){ // no data
 				return null;
 			}
 			Int64 piece_number = System.BitConverter.ToInt64(packet, 4);
