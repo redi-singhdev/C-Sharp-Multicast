@@ -209,6 +209,7 @@ namespace Multicast_test
 				Thread.Sleep(250);
 				if (control.ReceiveChecker()){
 					Console.WriteLine("Done Receiving");
+					break;
 				}else{
 					Console.WriteLine("Receiving: " + control.GetPercent());
 				}

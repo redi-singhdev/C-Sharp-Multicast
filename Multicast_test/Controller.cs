@@ -211,7 +211,6 @@ namespace Multicast_test
 				
 				if (piece != null){
 					if ( piece.number >= 0){
-						Console.WriteLine("Got piece "+piece.number);
 						
 						file_stream.WriteSpecificPiece(piece);
 					}else if (piece.number == MESSAGE_RESEND){

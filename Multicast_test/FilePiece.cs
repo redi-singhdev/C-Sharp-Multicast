@@ -50,7 +50,9 @@ namespace Multicast_test
 //		}
 		
 		public byte[] get_packet(){
-			
+			if (data == null){
+				return null;
+			}
 			byte[] data_length = System.BitConverter.GetBytes(data.Length);
 			byte[] piece_number = System.BitConverter.GetBytes(number);
 			byte[] checksum = get_checksum();
