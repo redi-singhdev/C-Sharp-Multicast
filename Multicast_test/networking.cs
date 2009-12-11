@@ -20,7 +20,7 @@ namespace Multicast_test
 		private Thread receive_thread;
 		private Stack receive_buffer;
 
-		
+		//TODO: Make a destructor
 		
 		public networking(string address, int port_num)
 		{
@@ -74,6 +74,12 @@ namespace Multicast_test
 					Console.Error.WriteLine(e.ErrorCode);
 			}
 		}
+		
+		public ~networking(){
+			stop_receiving();
+		}
+		
+		
 		public void start_receiving(){
 			// start the receive thread right away!
 			
