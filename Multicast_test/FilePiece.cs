@@ -26,7 +26,11 @@ namespace Multicast_test
 		
 		public FilePiece(Int64 num, byte[] file_data)
 		{
-			data = file_data;
+			if (file_data == null){
+				data = new byte[0];
+			}else{
+				data = file_data;
+			}
 			number = num;
 		}
 		
