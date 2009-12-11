@@ -72,6 +72,11 @@ namespace Multicast_test
 			return Encoding.UTF8.GetBytes(fi.Name.Normalize());
 		}
 		
+		public string GetFileName_String(){
+			FileInfo fi = new FileInfo(path);
+			return fi.Name;
+		}
+		
 		public List<Int64> GetRequiredPieces(){
 			if (received_pieces.Count > 1){
 				Console.WriteLine("We know we're missing packets:" + received_pieces.Count);
