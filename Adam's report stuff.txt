@@ -40,10 +40,10 @@ The school network does not allow multicast. All computers connected to this net
 			
 	Form Elements
 		
-		Progress bar
-		Buttons
-		List box
-		Tooltip
+		Progress bar - used to show the amount that the file has been sent or riecived
+		Buttons - 
+		List box - used to list the files availably and possibly the people sending the file
+		Tooltip -used to help the user navigate the mCast program
 
 	Interface Overview
 		Interaction (?)
@@ -51,14 +51,15 @@ The school network does not allow multicast. All computers connected to this net
 		Sending the files
 		Receiving the files
 
+
 What Worked 
 The UI
 The GUI worked out in many respects, mainly the fact that the whole program is taking place in only a single form. This was for ease of use for the coding; having everything take place in one form meant that there would be little to no variables needed to be passed from one Form to another.
  For the whole program to take place in a single form there were some changes that had to be made. All the windows are actually elements put in a table and when a different “form” needs to be shown it hides the current one and show the one that will be on screen. The form was then resized to just bigger than the table size so that it fits snugly. Tooltips were added to help the user navigate through the Mkast easily.
-•	Connecting over the network
-•	Git 
-o	Source control
-•	Cross platform development
+•Connecting over the network
+•Git 
+oSource control
+•Cross platform development
 
 What Didn’t Work
 -	File recognition
