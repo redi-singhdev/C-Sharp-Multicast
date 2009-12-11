@@ -1,0 +1,44 @@
+
+Implementation Details
+
+The project uses technology that can be found in Visual Studio. There are essentially two components to the program: The visual front end, and a data back end. The front end was created using Visual Studio, while the back end was coded using Monodevelop. The project was managed using Git, with the repository being stored on GitHub.
+The school network does not allow multicast. All computers connected to this network are also firewalled, and do not allow any programs to open a UDP listening port. This makes it impossible to use our program on any lab computer.
+
+	Technology
+		
+		C# and .NET have some support for multicast, but any protocol built on such a UDP technology must be created by oneself. There are no helper libraries.
+		
+		Libraries
+		
+		We did not use any external libraries apart from our own. There were none available.
+		
+		Our Own
+			
+			Our own library was created to send files over multicast. This involved coming up with a protocol, an understanding basic UDP networking, and other technologies.
+			The basis of our main "Controller" object is a networking object that has a receiving thread. This thread pushes every received chunk on to a stack so that another thread may pop them off (there is no shift operation in C#).
+			The Controller object is designed to be run either in the same thread as your GUI thread, being polled on a timer, or be run in a seperate thread. The class is, as of this writing, not thread safe and cannot be run in it's own thread as of yet.
+			
+			Packet Packager
+				
+				The library contains a FilePiece class that effectively composes and parses the packets for and from the networking object. Creating this object had to be done very carefully, and an understanding of byte arrays was certainly required. 
+				The FilePiece class uses an MD5 sum to verify that packets are uncorrupted.
+				Each piece is numbered. The number signifies which section of the file the piece is from. The calculated position is the number times the data length in bytes.
+				
+				Another class handles writing and reading the file in  question called FileStreamer. It handles writing and seeking a file. This is likely extremely slow, and not coded entirely to code, but it works.   
+				
+		.Net
+			
+			The .NET libraries contain a Sockets class that is used to communicate over the network. Please note that this library throws seemingly random exceptions if a network connection is lost at any point. This may cause mCast to slow down.
+			
+	Form Elements
+		
+		Progress bar
+		Buttons
+		List box
+		Tooltip
+
+	Interface Overview
+		Interaction (?)
+		Networking
+		Sending the files
+		Receiving the files
