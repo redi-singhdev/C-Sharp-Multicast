@@ -1,3 +1,11 @@
+Introduction
+This document is for the IMD 3004 class Human Computer interaction and Design. Our group consists of Thomas Kenny and Adam Bielinski. In this report we will cover overview of the goals that we were setting to achieve, the design aspects of our program, what technology we used and mainly what worked and what didn’t work in our final release. 
+
+Objectives
+ 	Our main objective for the program was to create a Multicast File Transfer System that would easily allow users to share files with multiple people without having the fear of slow transfer rate. Making the interface simple for everyone to use was the other main objective of the project, making it easy to use would make it appeal to the masses. 
+
+
+
 
 Implementation Details
 
@@ -42,3 +50,22 @@ The school network does not allow multicast. All computers connected to this net
 		Networking
 		Sending the files
 		Receiving the files
+
+What Worked 
+The UI
+The GUI worked out in many respects, mainly the fact that the whole program is taking place in only a single form. This was for ease of use for the coding; having everything take place in one form meant that there would be little to no variables needed to be passed from one Form to another.
+ For the whole program to take place in a single form there were some changes that had to be made. All the windows are actually elements put in a table and when a different “form” needs to be shown it hides the current one and show the one that will be on screen. The form was then resized to just bigger than the table size so that it fits snugly. Tooltips were added to help the user navigate through the Mkast easily.
+•	Connecting over the network
+•	Git 
+o	Source control
+•	Cross platform development
+
+What Didn’t Work
+-	File recognition
+-	Loss of packets
+-	File properties transfer
+
+Conclusion
+-	Fuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+
+
