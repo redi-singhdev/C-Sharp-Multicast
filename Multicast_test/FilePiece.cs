@@ -42,7 +42,7 @@ namespace Multicast_test
 		public byte[] get_checksum(){
 			
 			MD5 checksum = new MD5CryptoServiceProvider();
-			byte[] sum = checksum.ComputeHash(data);
+			byte[] sum = checksum.ComputeHash(data); // TODO: make this for piece number and data length as well
 			return sum;
 		}
 //		public void send(){

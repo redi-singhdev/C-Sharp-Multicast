@@ -27,6 +27,8 @@ namespace Multicast_test
 		public Int64 packets_error; //number of error messages received
 		public DateTime start_time;
 		
+		private DateTime last_error; // time of last error received
+		
 		public double sending_speed; // bytes/second
 		
 		// constants
@@ -35,6 +37,7 @@ namespace Multicast_test
 		const double change_with_error_decrease = 0.90;
 		
 		const double MAX_AGE_FILES = 5;
+		const double CORRECTIONS_TIMEOUT = 5000.00; //ms
 		
 		const Int64 MESSAGE_RESEND = -1;
 		const Int64 MESSAGE_FILEINFO = -2;
@@ -248,6 +251,7 @@ namespace Multicast_test
 		}
 		
 		
+		
 		public bool SendChecker(){
 			// returns true if we're done sending
 			if (file_stream == null ){
@@ -277,8 +281,17 @@ namespace Multicast_test
 			}
 			
 			if (file_stream.GetFileStatus()){
-				return true;
 				// done sending, just sending corrections
+				if (last_error == null){
+					Console.WriteLine("last_error is null");
+					last_error = new DateTime();
+				}else if (received_error){
+					last_error = DateTime.Now;
+				}else if ((DateTime.Now - last_error ).TotalMilliseconds > CORRECTIONS_TIMEOUT){
+					
+					Console.WriteLine("No error! Time out :)");
+					return true;
+				}
 			}
 			
 			// now that we're caught up, adjust the speed based on errors.
@@ -290,29 +303,24 @@ namespace Multicast_test
 			
 			// returns true if all pieces have been sent. 
 			//Does some sending if there are things to send
-			if (!file_stream.GetFileStatus()){
-				double time_spent = (DateTime.Now.AddSeconds(1) - start_time).TotalSeconds;
-				while (sending_speed > (double)bytes_sent/(double)time_spent){
-					
-					FilePiece fp = file_stream.GetNextPiece();
-					if (fp != null){
-						byte[] bytes = fp.get_packet();
-						if (bytes != null){
-							network.send(bytes);
-							bytes_sent += bytes.Length;
-						}else{
-							// exit loop if we're done sending file
-							return true;
-						}
+			double time_spent = (DateTime.Now.AddSeconds(1) - start_time).TotalSeconds;
+			while (sending_speed > (double)bytes_sent/(double)time_spent){
+				
+				FilePiece fp = file_stream.GetNextPiece();
+				if (fp != null){
+					byte[] bytes = fp.get_packet();
+					if (bytes != null){
+						network.send(bytes);
+						bytes_sent += bytes.Length;
 					}else{
+						// exit loop if we're done sending file
 						return true;
 					}
+				}else{
+					return true;
 				}
-				return false;
-			}else{
-				// file stream is done, so we're done sending!
-				return true;
 			}
+			return false;
 			
 		}
 		

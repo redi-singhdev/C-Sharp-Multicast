@@ -158,6 +158,8 @@ namespace Multicast_test
 			fs.Seek(piece.number * FilePiece.data_size, SeekOrigin.Begin);
 			fs.Write(piece.get_data(), 0, piece.data.Length);
 			
+			received_pieces.Sort();
+			
 			if (received_pieces.Count <= 1 && received_pieces[0].Equals(piece.number - 1)){
 				received_pieces.Clear();
 				received_pieces.Add(piece.number);

@@ -65,12 +65,24 @@ TableLayoutPannel - used to store the different "windows" that mCast navtigates 
 What Worked 
 The UI
 The GUI worked out in many respects, mainly the fact that the whole program is taking place in only a single form. This was for ease of use for the coding; having everything take place in one form meant that there would be little to no variables needed to be passed from one Form to another.
- For the whole program to take place in a single form there were some changes that had to be made. All the windows are actually elements put in a table and when a different “form” needs to be shown it hides the current one and show the one that will be on screen. The form was then resized to just bigger than the table size so that it fits snugly. Tooltips were added to help the user navigate through the Mkast easily.
+ For the whole program to take place in a single form there were some changes that had to be made. All the windows are actually elements put in a table and when a different “form” needs to be shown it hides the current one and show the one that will be on screen. The form was then resized to just bigger than the table size so that it fits snugly. Tooltips were added to help the user navigate through the mCast easily.
 
 Connecting over the network
+
+The program successfully sends and receives packets, as well as encoding and decoding these packets. It works well enough.
+
 Git 
+
+Git was a huge help. It allowed us to easily share the code and work (including this report) between any and all computers we were working on.
+
 Source control
+
+The ability to roll back changes and make branches saved us a few times. Source control should be required for all software projects.
+
 Cross platform development
+
+It was interesting to work on two different platforms with incompatible user interfaces. It was required to use the Windows Forms to generate the interface, but of course this can only be compiled on windows (easily). So for the Linux machine, a command-line interface was developed. This did not take more than an hour to generate, and in doing so, exposed a number flaws in the library's coding.
+
 
 What Didn't Work
 -	File recognition
