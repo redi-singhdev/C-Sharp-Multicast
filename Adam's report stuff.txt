@@ -86,8 +86,26 @@ It was interesting to work on two different platforms with incompatible user int
 
 What Didn't Work
 -	File recognition
+	
+	We haven't yet implemented any sort of file type information that is sent to the clients. This prevents the client from really knowing what kind of file they are getting. For instance, the client could accept a transfer from a server for a movie called "movie.avi", but save it as "movie.txt". If the client opens this by double-clicking, it will open in a text editor and will not function correctly.
+	
 -	Loss of packets
--	File properties transfer
+	
+	It is impossible to say why due to the nature of UDP, but currently some packets get lost in transit. There is an algorithm that gets the client to request these missing packets. This currently does not work at 100% and some packets are never received, corrupting the file occasionally. 
+	
+-	File Corruption
+	
+	Currently there is a bug in the protocol, where the checksum does not check the integrity of the entire packet, but only the data itself. This means that some correct data could end up in an incorrect place in a file.
+	
+-	Speed
+	
+	Currently the speed of the transfer is artificially low. This is because we really don't know how fast to make it. It also makes bugtesting easier.
+	
+-	Multiple files
+	
+	Currently the "file selection" that the reciever does is useless. Only one file can be sent on a network at once. This can be fixed by either giving each file a unique identifier that is sent along with the packets, or by putting each file transfer on a different multicast address and/or port. Both would require some modification of the protocol.
+	
+	
 
 Conclusion
 the overall development of mCast was a two faced ordreal. sometimes development went smoothly while when problems did arrive they were difficult to decifer but usually there was a simple fix. There were a few times that ideas had to be rethought through to be solved but these solutions did not take too long to impliment.  
