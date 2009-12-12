@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Collections;
+using System.Collections.Generic;
 
 
 namespace Multicast_test
@@ -18,13 +19,13 @@ namespace Multicast_test
 		private Socket sender;
 		private Socket receiver;
 		private Thread receive_thread;
-		private Stack receive_buffer;
+		private List<byte[]> receive_buffer;
 
 		//TODO: Make a destructor
 		
 		public networking(string address, int port_num)
 		{
-			receive_buffer = new Stack();
+			receive_buffer = new List<byte[]>();
 			try{
 				
 				ip = IPAddress.Parse(address);
@@ -65,6 +66,8 @@ namespace Multicast_test
 				receiver.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(ip));
 				
 				
+				// START THE THREAD NAOW
+				start_receiving();
 
 				
 				}catch(System.Net.Sockets.SocketException e) {
@@ -75,12 +78,12 @@ namespace Multicast_test
 			}
 		}
 		
-		public ~networking(){
+		~networking(){
 			stop_receiving();
 		}
 		
 		
-		public void start_receiving(){
+		private void start_receiving(){
 			// start the receive thread right away!
 			
 			receive_thread = new Thread(new ThreadStart(receive));
@@ -89,7 +92,7 @@ namespace Multicast_test
 			receive_thread.Start();
 		}
 		
-		public void stop_receiving(){
+		private void stop_receiving(){
 			
 			receive_thread.Abort();
 		}
@@ -122,15 +125,10 @@ namespace Multicast_test
 		}
 		
 		public byte[] PopReceiveBuffer(){
-			lock(receive_buffer.SyncRoot){
+			lock(receive_buffer){
 				if (receive_buffer.Count > 0){
-					
-					byte[] b = (byte[])receive_buffer.Pop();
-//					Console.WriteLine("Raw packet data:");
-//					for (int i = 0; i < b.Length; i ++){
-//						Console.Write(b[i].ToString());
-//					}
-//					Console.WriteLine();
+					byte[] b = (byte[])receive_buffer[0];
+					receive_buffer.RemoveAt(0);
 					return b;
 				}else{
 					return (byte[])null;
@@ -139,7 +137,7 @@ namespace Multicast_test
 		}
 		
 		public int GetAmountInReceiveBuffer(){
-			lock(receive_buffer.SyncRoot){
+			lock(receive_buffer){
 				return receive_buffer.Count;
 			}
 		}
@@ -161,8 +159,8 @@ namespace Multicast_test
 						byte[] b=new byte[FilePiece.data_size + FilePiece.header_size];
 						// receive up to FilePiece bytes
 						receiver.Receive(b, SocketFlags.None);
-						lock(receive_buffer.SyncRoot)
-							receive_buffer.Push( b);
+						lock(receive_buffer)
+							receive_buffer.Add( b);
 					}catch{
 						Console.WriteLine("Bad packet received. Sender should slow down a bit?");
 					}

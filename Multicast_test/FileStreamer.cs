@@ -79,7 +79,6 @@ namespace Multicast_test
 		
 		public List<Int64> GetRequiredPieces(){
 			if (received_pieces.Count > 1){
-				Console.WriteLine("We know we're missing packets:" + received_pieces.Count);
 				received_pieces.Sort();
 				List<Int64> required_pieces = new List<Int64>();
 				int pos = 0;
@@ -92,6 +91,19 @@ namespace Multicast_test
 						}
 					}
 				}
+				
+				Console.WriteLine("We know we're missing packets:" + required_pieces.Count);
+				foreach (Int64 num in required_pieces){
+					Console.Write(num + ", ");
+				}
+				if (required_pieces.Count <= 0){
+					while (received_pieces.Count >= 2 && received_pieces[0] == received_pieces[1]-1){
+						received_pieces.RemoveAt(0);
+						Console.WriteLine("There were packets here that we already had.");
+					}
+				}
+				
+				Console.WriteLine();
 				return required_pieces;
 			}
 			return null;
@@ -165,15 +177,24 @@ namespace Multicast_test
 			
 			received_pieces.Sort();
 			
+			while (received_pieces.Count >= 2 && received_pieces[0] == received_pieces[1]-1){
+				received_pieces.RemoveAt(0);
+			}
+			
+			
 			if (received_pieces.Count <= 1 && received_pieces[0].Equals(piece.number - 1)){
 				received_pieces.Clear();
 				received_pieces.Add(piece.number);
 			}else{
 				if (received_pieces.Contains(piece.number)){
 					Console.WriteLine("Detected Duplicate packet");
-					received_pieces.Remove(piece.number);
+					while (received_pieces.Remove(piece.number)){
+						Console.WriteLine("packet removed");
+					}
 				}else{
-					received_pieces.Add(piece.number);
+					if (received_pieces[0] < piece.number){
+						received_pieces.Add(piece.number);
+					}
 				}
 			}
 			

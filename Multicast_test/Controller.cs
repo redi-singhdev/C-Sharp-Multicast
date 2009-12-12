@@ -53,7 +53,6 @@ namespace Multicast_test
 			files_available = new List<files_available>();
 			// don't init filestreamer yet
 			
-			network.start_receiving();
 		}
 		
 		public void reset_stats(){
@@ -242,6 +241,7 @@ namespace Multicast_test
 				return false;
 			}
 			start_time = DateTime.Now;
+			last_error = DateTime.MinValue;
 			
 			// start receiving too, because we need to watch for errors.
 			// we also need to remember to disregard positive file numbers
@@ -269,11 +269,17 @@ namespace Multicast_test
 						// do nothing. We are not a receiver!
 					}else if (piece.number == MESSAGE_RESEND){
 						// we are server! We must re-send this packet.
+						
 						received_error = true;
 						packets_error++;
-						FilePiece specific_piece = new FilePiece(piece.number, file_stream.GetSpecificChunk(piece.number));
-						network.send(specific_piece.get_packet());
-						bytes_sent += specific_piece.get_packet_size();
+						Int64 actual_number = BitConverter.ToInt64(piece.get_data(), 0);
+						if (actual_number != 0){
+							FilePiece specific_piece = new FilePiece(actual_number, file_stream.GetSpecificChunk(actual_number));
+							network.send(specific_piece.get_packet());
+							bytes_sent += specific_piece.get_packet_size();
+						}else{
+							Console.WriteLine("Hmm, something's wrong with that packet");
+						}
 					}
 				}
 				b = network.PopReceiveBuffer();
@@ -281,12 +287,12 @@ namespace Multicast_test
 			
 			if (file_stream.GetFileStatus()){
 				// done sending, just sending corrections
-				if (last_error == null){
+				if (last_error == DateTime.MinValue){
 					Console.WriteLine("last_error is null");
 					last_error = new DateTime();
 				}else if (received_error){
 					last_error = DateTime.Now;
-				}else if ((DateTime.Now - last_error ).TotalMilliseconds > CORRECTIONS_TIMEOUT){
+				}else if ((DateTime.Now.Subtract(last_error) ).TotalMilliseconds > CORRECTIONS_TIMEOUT){
 					
 					Console.WriteLine("No error! Time out :)");
 					return true;

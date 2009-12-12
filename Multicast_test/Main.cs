@@ -199,12 +199,12 @@ namespace Multicast_test
 		public static void ReceiveFile(string file){
 			FileInfo fi = new FileInfo(file);
 			if (fi.Exists){
-				Console.WriteLine("File exist! Overwriting.");
+				Console.WriteLine("File exists! Overwriting.");
 				// TODO: Make it ask
 			}
 			
 			Controller control = new Controller(ip, port);
-			control.SetWriteFile(file, 90000);
+			control.SetWriteFile(file, 95000);
 			while(true){
 				Thread.Sleep(250);
 				if (control.ReceiveChecker()){
